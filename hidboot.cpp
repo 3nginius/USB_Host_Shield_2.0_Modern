@@ -43,13 +43,13 @@ void MouseReportParser::Parse(USBHID *hid __attribute__((unused)), bool is_rpt_i
         if (prevState.mouseInfo.bmXButton1 == 0 && pmi->bmXButton1 == 1)
                 OnXB1ButtonDown(pmi);
  
-        if (prevState.mouseInfo.bmXB1Button == 1 && pmi->bmXB1Button == 0)
+        if (prevState.mouseInfo.bmXButton1 == 1 && pmi->bmXButton1 == 0)
                 OnXB1ButtonUp(pmi);
  
         if (prevState.mouseInfo.bmXButton2 == 0 && pmi->bmXButton2 == 1)
                 OnXB2ButtonDown(pmi);
  
-        if (prevState.mouseInfo.bmXB2Button == 1 && pmi->bmXB2Button == 0)
+        if (prevState.mouseInfo.bmXButton2 == 1 && pmi->bmXButton2 == 0)
                 OnXB2ButtonUp(pmi);
  
         if (prevState.mouseInfo.dX != pmi->dX || prevState.mouseInfo.dY != pmi->dY)
@@ -89,8 +89,8 @@ void MouseReportParser::Parse(USBHID *hid __attribute__((unused)), bool is_rpt_i
                 // event = true;
         }
  
-        if(prevState.mouseInfo.bmXB1Button != pmi->bmXB1Button) {
-                if(pmi->bmXB1Button) {
+        if(prevState.mouseInfo.bmXButton1 != pmi->bmXButton1) {
+                if(pmi->bmXButton1) {
                         OnXB1ButtonDown(pmi);
                 } else {
                         OnXB1ButtonUp(pmi);
@@ -99,8 +99,8 @@ void MouseReportParser::Parse(USBHID *hid __attribute__((unused)), bool is_rpt_i
                 // event = true;
         }
  
-        if(prevState.mouseInfo.bmXB2Button != pmi->bmXB2Button) {
-                if(pmi->bmXB2Button) {
+        if(prevState.mouseInfo.bmXButton2 != pmi->bmXButton2) {
+                if(pmi->bmXButton2) {
                         OnXB2ButtonDown(pmi);
                 } else {
                         OnXB2ButtonUp(pmi);
