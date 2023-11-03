@@ -52,36 +52,51 @@ struct MOUSEINFO {
 };
 
 class MouseReportParser : public HIDReportParser {
-
+ 
         union {
                 MOUSEINFO mouseInfo;
                 uint8_t bInfo[sizeof (MOUSEINFO)];
         } prevState;
-
+ 
 public:
         void Parse(USBHID *hid, bool is_rpt_id, uint8_t len, uint8_t *buf);
-
+ 
 protected:
-
+ 
         virtual void OnMouseMove(MOUSEINFO *mi __attribute__((unused))) {
         };
-
+ 
+        virtual void OnMouseScroll(MOUSEINFO *mi __attribute__((unused))) {
+        };
+ 
         virtual void OnLeftButtonUp(MOUSEINFO *mi __attribute__((unused))) {
         };
-
+ 
         virtual void OnLeftButtonDown(MOUSEINFO *mi __attribute__((unused))) {
         };
-
+ 
         virtual void OnRightButtonUp(MOUSEINFO *mi __attribute__((unused))) {
         };
-
+ 
         virtual void OnRightButtonDown(MOUSEINFO *mi __attribute__((unused))) {
         };
-
+ 
         virtual void OnMiddleButtonUp(MOUSEINFO *mi __attribute__((unused))) {
         };
-
+ 
         virtual void OnMiddleButtonDown(MOUSEINFO *mi __attribute__((unused))) {
+        };
+ 
+        virtual void OnXB1ButtonUp(MOUSEINFO *mi __attribute__((unused))) {
+        };
+ 
+        virtual void OnXB1ButtonDown(MOUSEINFO *mi __attribute__((unused))) {
+        };
+ 
+        virtual void OnXB2ButtonUp(MOUSEINFO *mi __attribute__((unused))) {
+        };
+ 
+        virtual void OnXB2ButtonDown(MOUSEINFO *mi __attribute__((unused))) {
         };
 };
 
