@@ -40,13 +40,13 @@ void MouseReportParser::Parse(USBHID *hid __attribute__((unused)), bool is_rpt_i
         if (prevState.mouseInfo.bmMiddleButton == 1 && pmi->bmMiddleButton == 0)
                 OnMiddleButtonUp(pmi);
  
-        if (prevState.mouseInfo.bmXB1Button == 0 && pmi->bmXB1Button == 1)
+        if (prevState.mouseInfo.bmXButton1 == 0 && pmi->bmXButton1 == 1)
                 OnXB1ButtonDown(pmi);
  
         if (prevState.mouseInfo.bmXB1Button == 1 && pmi->bmXB1Button == 0)
                 OnXB1ButtonUp(pmi);
  
-        if (prevState.mouseInfo.bmXB2Button == 0 && pmi->bmXB2Button == 1)
+        if (prevState.mouseInfo.bmXButton2 == 0 && pmi->bmXButton2 == 1)
                 OnXB2ButtonDown(pmi);
  
         if (prevState.mouseInfo.bmXB2Button == 1 && pmi->bmXB2Button == 0)
