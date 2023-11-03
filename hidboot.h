@@ -37,15 +37,18 @@ e-mail   :  support@circuitsathome.com
 // #define HID_MAX_HID_CLASS_DESCRIPTORS 5
 
 struct MOUSEINFO {
-
+ 
         struct {
                 uint8_t bmLeftButton : 1;
                 uint8_t bmRightButton : 1;
                 uint8_t bmMiddleButton : 1;
-                uint8_t bmDummy : 5;
+                uint8_t bmXButton1 : 1;
+                uint8_t bmXButton2 : 1;
+                uint8_t bmDummy : 3;
         };
         int8_t dX;
         int8_t dY;
+        int8_t dZ;
 };
 
 class MouseReportParser : public HIDReportParser {
