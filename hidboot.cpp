@@ -20,51 +20,45 @@ void MouseReportParser::Parse(USBHID *hid __attribute__((unused)), bool is_rpt_i
         MOUSEINFO *pmi = (MOUSEINFO*)buf;
         // Future:
         // bool event;
-
+ 
 #if 0
         if (prevState.mouseInfo.bmLeftButton == 0 && pmi->bmLeftButton == 1)
                 OnLeftButtonDown(pmi);
-
+ 
         if (prevState.mouseInfo.bmLeftButton == 1 && pmi->bmLeftButton == 0)
                 OnLeftButtonUp(pmi);
-
+ 
         if (prevState.mouseInfo.bmRightButton == 0 && pmi->bmRightButton == 1)
                 OnRightButtonDown(pmi);
-
+ 
         if (prevState.mouseInfo.bmRightButton == 1 && pmi->bmRightButton == 0)
                 OnRightButtonUp(pmi);
-
+ 
         if (prevState.mouseInfo.bmMiddleButton == 0 && pmi->bmMiddleButton == 1)
                 OnMiddleButtonDown(pmi);
-
+ 
         if (prevState.mouseInfo.bmMiddleButton == 1 && pmi->bmMiddleButton == 0)
                 OnMiddleButtonUp(pmi);
-
+ 
+        if (prevState.mouseInfo.bmXB1Button == 0 && pmi->bmXB1Button == 1)
+                OnXB1ButtonDown(pmi);
+ 
+        if (prevState.mouseInfo.bmXB1Button == 1 && pmi->bmXB1Button == 0)
+                OnXB1ButtonUp(pmi);
+ 
+        if (prevState.mouseInfo.bmXB2Button == 0 && pmi->bmXB2Button == 1)
+                OnXB2ButtonDown(pmi);
+ 
+        if (prevState.mouseInfo.bmXB2Button == 1 && pmi->bmXB2Button == 0)
+                OnXB2ButtonUp(pmi);
+ 
         if (prevState.mouseInfo.dX != pmi->dX || prevState.mouseInfo.dY != pmi->dY)
                 OnMouseMove(pmi);
-
+ 
         if (len > sizeof (MOUSEINFO))
                 for (uint8_t i = 0; i<sizeof (MOUSEINFO); i++)
                         prevState.bInfo[i] = buf[i];
 #else
-        //
-        // Optimization idea:
-        //
-        // 1: Don't pass the structure on every event. Buttons would not need it.
-        // 2: Only pass x/y values in the movement routine.
-        //
-        // These two changes (with the ones I have made) will save extra flash.
-        // The only "bad" thing is that it could break old code.
-        //
-        // Future thoughts:
-        //
-        // The extra space gained can be used for a generic mouse event that can be called
-        // when there are _ANY_ changes. This one you _MAY_ want to pass everything, however the
-        // sketch could already have noted these facts to support drag/drop scroll wheel stuff, etc.
-        //
-
-        // Why do we need to pass the structure for buttons?
-        // The function call not enough of a hint for what is happening?
         if(prevState.mouseInfo.bmLeftButton != pmi->bmLeftButton ) {
                 if(pmi->bmLeftButton) {
                         OnLeftButtonDown(pmi);
@@ -74,7 +68,7 @@ void MouseReportParser::Parse(USBHID *hid __attribute__((unused)), bool is_rpt_i
                 // Future:
                 // event = true;
         }
-
+ 
         if(prevState.mouseInfo.bmRightButton != pmi->bmRightButton) {
                 if(pmi->bmRightButton) {
                         OnRightButtonDown(pmi);
@@ -84,7 +78,7 @@ void MouseReportParser::Parse(USBHID *hid __attribute__((unused)), bool is_rpt_i
                 // Future:
                 // event = true;
         }
-
+ 
         if(prevState.mouseInfo.bmMiddleButton != pmi->bmMiddleButton) {
                 if(pmi->bmMiddleButton) {
                         OnMiddleButtonDown(pmi);
@@ -94,15 +88,33 @@ void MouseReportParser::Parse(USBHID *hid __attribute__((unused)), bool is_rpt_i
                 // Future:
                 // event = true;
         }
-
-        //
-        // Scroll wheel(s), are not part of the spec, but we could support it.
-        // Logitech wireless keyboard and mouse combo reports scroll wheel in byte 4
-        // We wouldn't even need to save this information.
-        //if(len > 3) {
-        //}
-        //
-
+ 
+        if(prevState.mouseInfo.bmXB1Button != pmi->bmXB1Button) {
+                if(pmi->bmXB1Button) {
+                        OnXB1ButtonDown(pmi);
+                } else {
+                        OnXB1ButtonUp(pmi);
+                }
+                // Future:
+                // event = true;
+        }
+ 
+        if(prevState.mouseInfo.bmXB2Button != pmi->bmXB2Button) {
+                if(pmi->bmXB2Button) {
+                        OnXB2ButtonDown(pmi);
+                } else {
+                        OnXB2ButtonUp(pmi);
+                }
+                // Future:
+                // event = true;
+        }
+ 
+        if(pmi->dZ) {
+                OnMouseScroll(pmi);
+                // Future:
+                // event = true;
+        }
+ 
         // Mice only report motion when they actually move!
         // Why not just pass the x/y values to simplify things??
         if(pmi->dX || pmi->dY) {
@@ -110,18 +122,18 @@ void MouseReportParser::Parse(USBHID *hid __attribute__((unused)), bool is_rpt_i
                 // Future:
                 // event = true;
         }
-
+ 
         //
         // Future:
         // Provide a callback that operates on the gathered events from above.
         //
         // if(event) OnMouse();
         //
-
+ 
         // Only the first byte matters (buttons). We do NOT need to save position info.
         prevState.bInfo[0] = buf[0];
 #endif
-
+ 
 };
 
 void KeyboardReportParser::Parse(USBHID *hid, bool is_rpt_id __attribute__((unused)), uint8_t len __attribute__((unused)), uint8_t *buf) {
